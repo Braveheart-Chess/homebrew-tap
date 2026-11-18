@@ -20,6 +20,27 @@ The hooks are a convenience. CI is the authoritative check.
 | --- | --- | --- |
 | `Commit messages` | commitlint over every commit in `base..head` | `npx commitlint --from origin/main --to HEAD --verbose` |
 | `PR title` | The title is a Conventional Commit | |
+| `Formula (macOS arm64)`, `Formula (macOS Intel)`, `Formula (Linux x86-64)`, `Formula (Linux ARM)` | `brew install`, `brew test`, `brew linkage --test` and `brew audit --strict --online` on that platform | [Testing a formula change](#testing-a-formula-change) |
+| `Formula style` | `brew style`, and `brew readall` on every OS and architecture | `brew style --formula braveheart-chess/tap/braveheart` |
+
+## Testing a formula change
+
+Tap your branch under the real tap name, install from it, and remove it
+afterwards so that your Homebrew goes back to the published tap:
+
+```sh
+brew untap braveheart-chess/tap 2>/dev/null   # if you use the published tap
+brew tap braveheart-chess/tap "$PWD"          # clones the branch's last commit
+brew install braveheart-chess/tap/braveheart
+brew test braveheart-chess/tap/braveheart
+brew audit --strict --online --formula braveheart-chess/tap/braveheart
+brew style --formula braveheart-chess/tap/braveheart
+brew readall --os=all --arch=all braveheart-chess/tap
+brew uninstall braveheart && brew untap braveheart-chess/tap
+```
+
+`brew audit --os=linux --arch=arm` (and the other combinations) checks a
+platform you are not on. CI runs the install and the test on all four.
 
 ## Commit messages
 
