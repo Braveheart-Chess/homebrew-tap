@@ -57,7 +57,58 @@ same on every machine: 919,304 for v0.54.0, the number in that release's
 notes. Each release's notes list its signature, so a matching number shows
 the engine you installed is the one that was measured.
 
-With no command, `braveheart` speaks UCI on stdin and stdout. To play it in a
+### Talk to it in UCI
+
+With no command, `braveheart` speaks
+[UCI](https://backscattering.de/chess/uci/), the text protocol chess GUIs use
+to drive an engine. Run `braveheart` on its own and type these lines, or pipe
+them in as the last command above does; when its input ends, it finishes the
+search it is on and exits.
+
+```text
+uci
+setoption name Hash value 64
+isready
+ucinewgame
+position startpos moves e2e4 e7e5 g1f3 b8c6 d2d4
+go depth 16
+quit
+```
+
+| Line | What it does |
+| --- | --- |
+| `uci` | It names itself, lists its options, and answers `uciok`. |
+| `setoption name Hash value 64` | A 64 MB hash table (the default is 16). |
+| `isready` | Answers `readyok` once it is set up. |
+| `ucinewgame` | Forgets the previous game. |
+| `position startpos moves …` | The starting position (or `fen <FEN>`), then the moves played since, in long algebraic notation: `e2e4`, `e1g1` to castle, `e7e8q` to promote. |
+| `go depth 16` | Searches 16 moves deep. |
+| `quit` | Exits. |
+
+The position is the Scotch (1. e4 e5 2. Nf3 Nc6 3. d4), Scotland's own
+opening. The search prints one `info` line per depth and ends with the
+engine's move and the reply it expects (v0.54.0's output; the timings depend
+on your machine):
+
+```text
+info depth 16 score cp -43 nodes 367377 nps 2007524 time 183 pv e5d4 f3d4 g8f6 d4c6 b7c6 f1d3
+bestmove e5d4 ponder f3d4
+```
+
+The score is in centipawns for the side to move: Black is 0.43 pawns worse,
+the usual small edge for White. `pv` is the line it expects: 3...exd4
+4. Nxd4 Nf6 5. Nxc6 bxc6 6. Bd3. Other ways to limit a search:
+
+| Command | Searches |
+| --- | --- |
+| `go depth 14` | to a fixed depth |
+| `go movetime 2000` | for 2,000 ms |
+| `go wtime 60000 btime 60000 winc 1000 binc 1000` | as if playing a 1+1 game, budgeting its own time |
+| `go infinite` | until you send `stop` |
+
+### Play it in a GUI
+
+To play it in a
 GUI such as [Cute Chess](https://github.com/cutechess/cutechess),
 [En Croissant](https://encroissant.org/) or
 [BanksiaGUI](https://banksiagui.com/), add a UCI engine and point it at the
