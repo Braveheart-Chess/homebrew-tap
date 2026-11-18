@@ -24,6 +24,15 @@ ones you MUST follow.
 - **Run the repo's checks locally before opening the PR** (see below).
 - **Engine changes belong in the engine repository.** This repository only
   packages what the engine releases.
+- **The install command is a contract.** People run
+  `brew install braveheart-chess/tap/braveheart` and later `brew upgrade`.
+  Never rename the formula or this repository, or drop a platform, without
+  the owner's say-so; when it does happen it is a breaking change (`feat!:`).
+- **Checksums come from the release.** A `sha256` in the formula is the hash
+  of the exact file its `url` downloads, checked against the `.sha256` file
+  the engine's release workflow attached. Never type one in from anywhere else.
+- **Every platform stays tested.** A formula change passes the `Formula` job
+  on all four runners; don't skip one or mark it optional.
 - **`CHANGELOG.md` is Release Please's.** Never edit it by hand.
 
 ## Before opening a PR
@@ -33,6 +42,9 @@ npm ci
 npx commitlint --from origin/main --to HEAD --verbose
 pre-commit run --all-files
 ```
+
+For a formula change, test the branch through a local tap (see
+[CONTRIBUTING.md](CONTRIBUTING.md#testing-a-formula-change)), then untap it.
 
 ## Things that need the owner
 

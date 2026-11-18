@@ -66,3 +66,54 @@ jobs:
             test
             revert
           requireScope: false
+
+  formula:
+    name: Formula (${{ matrix.platform }})
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            platform: macOS arm64
+          - os: macos-26-intel
+            platform: macOS Intel
+          - os: ubuntu-latest
+            platform: Linux x86-64
+          # No engine binary for Linux on ARM: the formula builds from source.
+          - os: ubuntu-24.04-arm
+            platform: Linux ARM
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_ENV_HINTS: "1"
+    steps:
+      # Installs Homebrew, taps this checkout as braveheart-chess/tap, and
+      # trusts it.
+      - uses: Homebrew/actions/setup-homebrew@2026.11.14.1
+      # The README's install command.
+      - name: Install
+        run: brew install --formula braveheart-chess/tap/braveheart
+      - name: Test (version, perft 4, a UCI search)
+        run: brew test --verbose braveheart-chess/tap/braveheart
+      - name: Linkage
+        run: brew linkage --test braveheart-chess/tap/braveheart
+      - name: Audit
+        run: brew audit --strict --online --formula braveheart-chess/tap/braveheart
+
+  style:
+    name: Formula style
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_ENV_HINTS: "1"
+    steps:
+      - uses: Homebrew/actions/setup-homebrew@2026.11.14.1
+      - name: Style (RuboCop, Homebrew's rules)
+        run: brew style --formula braveheart-chess/tap/braveheart
+      # Every platform must load, including those no runner tests.
+      - name: Load the formula on every OS and architecture
+        run: brew readall --os=all --arch=all braveheart-chess/tap
