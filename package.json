@@ -1,0 +1,17 @@
+{
+  "name": "homebrew-tap",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Tooling for commit message linting. The tap itself is the Ruby formulae in Formula/; see README.md.",
+  "type": "module",
+  "scripts": {
+    "commitlint": "commitlint"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
