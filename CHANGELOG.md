@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/Braveheart-Chess/homebrew-tap/compare/v0.1.1...v0.1.2) (2026-11-22)
+
+
+### Bug Fixes
+
+* **repo:** let dependabot's capitalised bump titles pass ([#8](https://github.com/Braveheart-Chess/homebrew-tap/issues/8)) ([d2747b3](https://github.com/Braveheart-Chess/homebrew-tap/commit/d2747b32f404a02c84d2da4aa5c1b1c4706a6674))
+
 ## [0.1.1](https://github.com/Braveheart-Chess/homebrew-tap/compare/v0.1.0...v0.1.1) (2026-11-22)
 
 
