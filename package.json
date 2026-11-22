@@ -5,7 +5,8 @@
   "description": "Tooling for commit message linting. The tap itself is the Ruby formulae in Formula/; see README.md.",
   "type": "module",
   "scripts": {
-    "commitlint": "commitlint"
+    "commitlint": "commitlint",
+    "test:commitlint": "node --test \"tools/commitlint/*.test.mjs\" && bash scripts/test-commitlint.sh"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
