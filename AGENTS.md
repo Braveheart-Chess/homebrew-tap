@@ -9,17 +9,13 @@ ones you MUST follow.
 ## Rules
 
 - **Never push to `main`.** Every change goes through a pull request on a branch.
-- **Commits are a single line**: `type(scope)?: subject`, at most 100 characters.
-  Allowed types: `feat`, `fix`, `docs`, `chore`, `refactor`, `ci`, `build`, `perf`, `style`, `test`, `revert`.
-  The only thing allowed after the header is a blank line and
-  `Co-authored-by: Name <email>` trailers. No body text. Put details in the PR description.
-- **Open PRs with a typed template** and fill in every section:
+- **Commits are a single line**: `type(scope): subject`, at most 100 characters, with a lowercase imperative subject and no trailing period. Types: `feat`, `fix`, `perf`, `revert`, `docs`, `refactor`, `test`, `build`, `ci`, `style`, `chore`; never invent another. Scope: exactly one of `SCOPES` in `commitlint.config.mjs` (the Scopes table in CONTRIBUTING.md); never invent one, and if none fits, ask. The only thing allowed after the header is a blank line and `Co-authored-by: Name <email>` trailers. No body text. Put details in the PR description.
+- **PR titles are valid commit headers**, scope included; squash merges use the title as the commit message.
+- **PR bodies use the template's sections, in order, every one filled in**; write "n/a" rather than deleting one:
 
   ```sh
-  gh pr create --template <feat|fix|docs|chore|refactor|ci>.md
+  gh pr create --title "type(scope): subject" --body-file <file>
   ```
-
-  The PR title MUST be a valid Conventional Commit; squash merges use it as the commit message.
 - **Merges are squash or rebase only.** Never create merge commits.
 - **Run the repo's checks locally before opening the PR** (see below).
 - **Engine changes belong in the engine repository.** This repository only
@@ -39,6 +35,7 @@ ones you MUST follow.
 
 ```sh
 npm ci
+npm run test:commitlint   # the commit rules, the scopes table and the fixtures
 npx commitlint --from origin/main --to HEAD --verbose
 pre-commit run --all-files
 ```
